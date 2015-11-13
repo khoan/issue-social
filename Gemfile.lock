@@ -1,0 +1,29 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cuba (3.4.0)
+      rack
+    hitimes (1.2.2)
+    httpclient (2.6.0.1)
+    mime-types (2.5)
+    mote (1.1.4)
+    rack (1.6.4)
+    rest-core (3.5.4)
+      httpclient
+      mime-types
+      timers (>= 4.0.1)
+    rest-more (3.3.3)
+      rest-core (>= 3.3.0)
+    timers (4.0.1)
+      hitimes
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cuba
+  mote
+  rest-more
+
+BUNDLED WITH
+   1.10.6
