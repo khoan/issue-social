@@ -1,3 +1,6 @@
+# a demo of facebook server side authentication
+# https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
+
 api = RestCore::Facebook.new(app_id: ENV['FACEBOOK_KEY'], secret: ENV['FACEBOOK_SECRET'])
 redirect_url ='http://issue-social.dev/facebook/callback'
 

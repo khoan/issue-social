@@ -13,7 +13,7 @@ end
 
 Cuba.define do
   on 'facebook' do
-    require_relative './facebook'
+    require_relative 'facebook'
     run Facebook
   end
 end
