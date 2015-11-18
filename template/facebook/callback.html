@@ -21,11 +21,15 @@
     (function init(parent) {
       if (window.opener) {
         parent = window.opener;
+        var close = true;
       } else if (window.parent) {
         parent = window.parent;
       }
 
       parent.postMessage({{JSON.dump token}}, "*");
+      if (close) {
+        window.close();
+      }
     })();
   </script>
 </body>
