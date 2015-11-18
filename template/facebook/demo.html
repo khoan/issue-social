@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Facebook iOS home screen App demo</title>
+</head>
+<body>
+  <a class="fb-connect iframe" href="#">connect via iframe</a>
+  <a class="fb-connect popup" href="#">connect via popup</a>
+
+  <a id="profile" href="#">my profile</a>
+
+  <br>
+
+  <script>
+    (function init(connect, iframe) {
+      var connect = document.querySelectorAll(".fb-connect"), i;
+      for(i = 0; i < connect.length; ++i) {
+        connect[i].addEventListener("click", function(event) {
+          var classList = event.target.classList;
+          event.preventDefault();
+
+          if (classList.contains("iframe")) {
+            iframe = document.createElement("iframe");
+            iframe.src = "http://a.issue-social.dev/facebook/auth";
+            document.body.appendChild(iframe);
+          } else if (classList.contains("popup")) {
+            window.open("http://a.issue-social.dev/facebook/auth");
+          }
+        });
+      }
+
+      window.addEventListener("message", function(message) {
+        console.log('----> child says', message);
+      }, false);
+    })();
+
+    (function initProfile(button, iframe) {
+      button = document.getElementById("profile");
+      button.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        iframe = document.createElement("iframe");
+        iframe.src = "http://a.issue-social.dev/facebook/profile";
+        document.body.appendChild(iframe);
+      });
+    })();
+  </script>
+</body>
+</html>
