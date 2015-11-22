@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Facebook callback</title>
+
+  % # method 3 - go back to iOS homescreen fullscreen webapp
+  <meta http-equiv="refresh" content="0;URL=http://issue-social.dev/facebook/demo">
 </head>
 <body>
   % for k,v in token
@@ -18,16 +21,26 @@
   {{JSON.dump debug}}
 
   <script>
+    alert('js eval');
     (function init(parent) {
-      if (window.opener) {
-        parent = window.opener;
-        var close = true;
-      } else if (window.parent) {
-        parent = window.parent;
-      }
+      var standalone = "standalone" in window.navigator
+      var fullscreen = standalone && window.navigator.standalone;
 
-      parent.postMessage({{JSON.dump token}}, "*");
-      if (close) {
+      if (fullscreen) {
+        console.log('---> fullscreen, going back');
+
+        // attempt 2 - unsuccessful to go back on homescreen iOS webapp fullscreen
+        //window.open("http://issue-social.dev/facebook/demo");
+      } else {
+        console.log('---> fullscreen, going back');
+        if (window.opener) {
+          parent = window.opener;
+        } else if (window.parent) {
+          parent = window.parent;
+        }
+
+        console.log('---> not fullscreen');
+        parent.postMessage({{JSON.dump token}}, "*");
         window.close();
       }
     })();

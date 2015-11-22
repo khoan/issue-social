@@ -23,8 +23,10 @@ Facebook = Cuba.new do
 
     debug = api.get('debug_token', input_token: token['access_token'], access_token: api.secret_access_token)
 
-    res.set_cookie('fb_id', value: debug['data']['user_id'], expires: Time.now+60*60*24, path: '/', domain: '.issue-social.dev')
+    # method 1 - go back to iOS homescreen webapp fullscreen
+    #res.redirect 'http://googel.com'
 
+    res.set_cookie('fb_id', value: debug['data']['user_id'], expires: Time.now+60*60*24, path: '/', domain: '.issue-social.dev')
     render 'template/facebook/callback.html', token: token, debug: debug
   end
 

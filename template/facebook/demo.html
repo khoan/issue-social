@@ -6,37 +6,38 @@
 
   % # https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
   <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <style>
+    a {
+      padding: 0 10px;
+    }
+  </style>
 </head>
 <body>
-  <a class="fb-connect iframe" href="#">connect via iframe</a>
-  <a class="fb-connect popup" href="#">connect via popup</a>
+  <a id="fb-connect-iframe" href="http://a.issue-social.dev/facebook/auth">connect via iframe</a>
+  <a class="popup" href="http://a.issue-social.dev/facebook/auth">connect via popup</a>
+  <a href="http://a.issue-social.dev/facebook/auth" target="_blank">connect</a>
 
-  <a id="profile" href="#">my profile</a>
+  <a id="profile" href="http://a.issue-social.dev/facebook/profile">my profile</a>
 
   <br>
 
   <script>
     (function init(connect, iframe) {
-      var standalone = "standalone" in window.navigator
-      var fullscreen = standalone && window.navigator.standalone;
+      connect = document.getElementById("fb-connect-iframe");
+      connect.addEventListener("click", function(event) {
+        iframe = document.createElement("iframe");
+        iframe.src = this.href;
+        document.body.appendChild(iframe);
+      });
 
-      var connect = document.querySelectorAll(".fb-connect"), i;
-      for(i = 0; i < connect.length; ++i) {
-        connect[i].addEventListener("click", function(event) {
-          var classList = event.target.classList;
-          event.preventDefault();
+      document.body.addEventListener("click", function(event) {
+        event.preventDefault();
 
-          if (classList.contains("iframe")) {
-            iframe = document.createElement("iframe");
-            iframe.src = "http://a.issue-social.dev/facebook/auth";
-            document.body.appendChild(iframe);
-          } else if (classList.contains("popup")) {
-
-
-            window.open("http://a.issue-social.dev/facebook/auth");
-          }
-        });
-      }
+        if (event.target.classList.contains("popup")) {
+          window.open(event.target.href);
+        }
+      });
 
       window.addEventListener("message", function(message) {
         console.log('----> child says', message);
@@ -49,7 +50,7 @@
         event.preventDefault();
 
         iframe = document.createElement("iframe");
-        iframe.src = "http://a.issue-social.dev/facebook/profile";
+        iframe.src = this.href;
         document.body.appendChild(iframe);
       });
     })();
