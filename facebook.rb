@@ -2,7 +2,7 @@
 # https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
 #
 # /auth   a demo of login flow
-# /demo   a demo of login flow within iframe 
+# /demo   a demo of login flow within iframe, and popup
 
 Facebook = Cuba.new do
   on 'demo' do
@@ -23,11 +23,13 @@ Facebook = Cuba.new do
 
     debug = api.get('debug_token', input_token: token['access_token'], access_token: api.secret_access_token)
 
-    # method 1 - go back to iOS homescreen webapp fullscreen
-    #res.redirect 'http://googel.com'
-
     res.set_cookie('fb_id', value: debug['data']['user_id'], expires: Time.now+60*60*24, path: '/', domain: '.issue-social.dev')
-    render 'template/facebook/callback.html', token: token, debug: debug
+
+    # method 1 - go back to iOS homescreen webapp fullscreen
+    res.redirect 'http://issue-social.dev/facebook/demo' #'http://googel.com'
+
+    # method 2 - use <meta> to redirect
+    #render 'template/facebook/callback.html', token: token, debug: debug
   end
 
   on 'auth' do

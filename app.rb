@@ -3,7 +3,6 @@ require 'logger'
 require 'mote'
 require 'rest-more'
 require 'time'
-require 'yaml'
 
 Log = Logger.new('debug.log')
 
