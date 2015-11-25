@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Facebook ID</title>
+</head>
+<body>
+  <h1>Vanity to robotic</h1>
+
+  <form action="/facebook/id" method="post">
+    <label>
+      https://facebook.com/
+      <input type="text" name="username" placeholder="username" value="sue.park.5855">
+    </label>
+    <input type="submit" name="submit" value="Go!">
+  </form>
+
+  <script>
+    (function init(facebook) {
+      document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        if (! document.getElementById("facebook-id")) {
+          facebook = document.createElement("p");
+          facebook.id = 'facebook-id';
+          document.body.appendChild(facebook);
+        }
+
+        facebook.innerText = "Looking up your Facebook ID...";
+
+        var xhr = new XMLHttpRequest;
+        xhr.addEventListener("load", function() {
+          facebook.innerText = "Facebook ID: "+this.responseText;
+        });
+        xhr.open(this.method, this.action, true);
+        xhr.send(new FormData(this));
+      });
+    })();
+  </script>
+</body>
+</html>

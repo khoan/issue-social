@@ -9,6 +9,22 @@ Facebook = Cuba.new do
     render 'template/facebook/demo.html'
   end
 
+  on 'id' do
+    on get do
+      render 'template/facebook/id.html'
+    end
+
+    on post do
+      url = "https://facebook.com/#{req.params['username']}"
+      client = RestCore::Universal.new
+      response = client.get(url)
+
+      id = response[%r{<meta property="al:android:url" content="fb://profile/([^"]+)"}, 1]
+
+      res.write id
+    end
+  end
+
   api = RestCore::Facebook.new(app_id: ENV['FACEBOOK_KEY'], secret: ENV['FACEBOOK_SECRET'], log_method: Log.method(:info))
   default_redirect_url ='http://issue-social.dev/facebook/callback'
 
