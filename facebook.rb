@@ -26,15 +26,20 @@ Facebook = Cuba.new do
   end
 
   api = RestCore::Facebook.new(app_id: ENV['FACEBOOK_KEY'], secret: ENV['FACEBOOK_SECRET'], log_method: Log.method(:info))
-  default_redirect_url ='http://issue-social.dev/facebook/callback'
+  default = {
+    redirect_uri: 'http://issue-social.dev/facebook/callback',
+    permissions: 'email,user_birthday,user_relationships,user_location',
+    fields: 'id,name,email,gender,location,age_range,birthday,location,relationship_status',
+  }
 
   on 'profile' do
-    user = api.get(req.cookies['fb_id'], access_token: api.secret_access_token)
+    fields = req.params['fields'] || default[:fields]
+    user = api.get(req.cookies['fb_id'], access_token: api.secret_access_token, fields: fields)
     render 'template/facebook/profile.html', user: user
   end
 
   on 'callback' do
-    token = api.authorize!(code: req.params['code'], redirect_uri: default_redirect_url)
+    token = api.authorize!(code: req.params['code'], redirect_uri: default[:redirect_uri])
     token['expired_at'] = (Time.now + token.delete('expires').to_i).httpdate
 
     debug = api.get('debug_token', input_token: token['access_token'], access_token: api.secret_access_token)
@@ -49,7 +54,8 @@ Facebook = Cuba.new do
   end
 
   on 'auth' do
-    login_url = api.authorize_url(redirect_uri: default_redirect_url)
+    scope = req.params['scope'] || default[:permissions]
+    login_url = api.authorize_url(redirect_uri: default[:redirect_uri], scope: scope)
     res.redirect login_url
   end
 end
